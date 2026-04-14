@@ -2,6 +2,8 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth-options";
 import { prisma } from "@/lib/db/prisma";
+import { ProblemEditor } from "@/components/editor/problem-editor";
+import { normalizeSavedCode } from "@/lib/problem/saved-code";
 
 type SessionPageProps = {
   params: Promise<{ id: string }>;
@@ -40,6 +42,12 @@ export default async function SessionPage({ params }: SessionPageProps) {
             <pre className="mt-3 whitespace-pre-wrap text-sm leading-6 text-neutral-200">
               {problem.generatedPrompt}
             </pre>
+            <div className="mt-4">
+              <ProblemEditor
+                problemInstanceId={problem.id}
+                initialCode={normalizeSavedCode(problem.savedCode)}
+              />
+            </div>
           </article>
         ))}
       </section>
