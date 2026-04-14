@@ -6,7 +6,7 @@ Interview preparation platform for object-oriented design and API-based coding i
 
 - Next.js App Router + TypeScript
 - TailwindCSS
-- PostgreSQL + Prisma
+- MongoDB + Prisma ORM
 - Next.js API routes
 
 ## Getting Started
@@ -19,18 +19,16 @@ Interview preparation platform for object-oriented design and API-based coding i
    ```bash
    cp .env.example .env
    ```
-3. Generate Prisma client:
+   Set `DATABASE_URL` to your MongoDB connection string (MongoDB Atlas or local `mongod`).
+3. Push Prisma schema to the database and seed templates:
    ```bash
    npm run prisma:generate
+   npm run prisma:push
+   npm run prisma:seed
    ```
 4. Run dev server:
    ```bash
    npm run dev
-   ```
-5. Run migrations and seed templates:
-   ```bash
-   npm run prisma:migrate
-   npm run prisma:seed
    ```
 
 ## Main Features
@@ -51,3 +49,4 @@ Interview preparation platform for object-oriented design and API-based coding i
 - Milestone 5: submission stub + results page
 - Milestone 6: embedded chatbot
 - Milestone 7: API validation and production polish
+- Database: MongoDB (replacing PostgreSQL for simpler hosted/local setup)

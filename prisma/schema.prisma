@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
@@ -31,19 +31,19 @@ enum ProgrammingLanguage {
 }
 
 model User {
-  id              String             @id @default(cuid())
-  name            String?
-  email           String             @unique
-  image           String?
-  createdAt       DateTime           @default(now())
-  updatedAt       DateTime           @updatedAt
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  name              String?
+  email             String    @unique
+  image             String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
   interviewSessions Session[]
-  submissions     Submission[]
+  submissions       Submission[]
 }
 
 model Session {
-  id               String            @id @default(cuid())
-  userId           String
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String            @db.ObjectId
   status           SessionStatus     @default(ACTIVE)
   startedAt        DateTime          @default(now())
   endedAt          DateTime?
@@ -52,10 +52,12 @@ model Session {
   user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   problemInstances ProblemInstance[]
   submissions      Submission[]
+
+  @@index([userId])
 }
 
 model ProblemTemplate {
-  id               String            @id @default(cuid())
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
   name             String            @unique
   type             ProblemType
   basePrompt       String
@@ -66,9 +68,9 @@ model ProblemTemplate {
 }
 
 model ProblemInstance {
-  id               String             @id @default(cuid())
-  sessionId        String
-  templateId       String
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  sessionId        String             @db.ObjectId
+  templateId       String             @db.ObjectId
   generatedPrompt  String
   selectedVariants String[]
   generationParams Json?
@@ -76,15 +78,17 @@ model ProblemInstance {
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
   session          Session            @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  template         ProblemTemplate    @relation(fields: [templateId], references: [id], onDelete: Restrict)
+  template         ProblemTemplate    @relation(fields: [templateId], references: [id])
   submissions      Submission[]
+
+  @@index([sessionId])
 }
 
 model Submission {
-  id                String              @id @default(cuid())
-  userId            String
-  sessionId         String
-  problemInstanceId String
+  id                String              @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String              @db.ObjectId
+  sessionId         String              @db.ObjectId
+  problemInstanceId String              @db.ObjectId
   language          ProgrammingLanguage
   code              String
   result            Json
@@ -94,4 +98,7 @@ model Submission {
   user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   session           Session             @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   problemInstance   ProblemInstance     @relation(fields: [problemInstanceId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([problemInstanceId])
 }
