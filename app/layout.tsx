@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AstraeaChatbot } from "@/components/chatbot/astraea-chatbot";
 
 export const metadata: Metadata = {
   title: "Astraea",
@@ -11,7 +12,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <AstraeaChatbot />
+      </body>
     </html>
   );
 }
