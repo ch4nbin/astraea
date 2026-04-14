@@ -87,7 +87,7 @@ export function AstraeaChatbot() {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {open ? (
-        <div className="w-[22rem] rounded-2xl border border-neutral-700 bg-neutral-950/95 shadow-2xl backdrop-blur">
+        <div className="w-88 rounded-2xl border border-neutral-700 bg-neutral-950/95 shadow-2xl backdrop-blur">
           <div className="flex items-center justify-between border-b border-neutral-800 px-4 py-3">
             <div>
               <p className="text-sm font-medium text-white">Astraea Coach</p>

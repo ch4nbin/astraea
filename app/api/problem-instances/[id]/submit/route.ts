@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentUserId } from "@/lib/auth/current-user";
 import { prisma } from "@/lib/db/prisma";
+import { submitPayloadSchema } from "@/lib/validation/api";
 
 type RouteContext = {
   params: Promise<{ id: string }>;
@@ -13,17 +14,11 @@ export async function POST(request: Request, { params }: RouteContext) {
   }
 
   const { id } = await params;
-  const body = (await request.json()) as {
-    language?: "JAVASCRIPT" | "PYTHON";
-    code?: string;
-  };
-
-  if (
-    (body.language !== "JAVASCRIPT" && body.language !== "PYTHON") ||
-    typeof body.code !== "string"
-  ) {
+  const parsed = submitPayloadSchema.safeParse(await request.json());
+  if (!parsed.success) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
+  const body = parsed.data;
 
   const problemInstance = await prisma.problemInstance.findFirst({
     where: {

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentUserId } from "@/lib/auth/current-user";
 import { prisma } from "@/lib/db/prisma";
+import { chatPayloadSchema } from "@/lib/validation/api";
 
 type ChatMessage = {
   role: "user" | "assistant";
@@ -37,15 +38,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = (await request.json()) as {
-    sessionId?: string;
-    message?: string;
-    history?: ChatMessage[];
-  };
-
-  if (typeof body.sessionId !== "string" || typeof body.message !== "string") {
+  const parsed = chatPayloadSchema.safeParse(await request.json());
+  if (!parsed.success) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
+  const body = parsed.data;
 
   const session = await prisma.session.findFirst({
     where: {
@@ -72,14 +69,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const safeHistory = Array.isArray(body.history)
-    ? body.history.filter(
-        (item) =>
-          item &&
-          (item.role === "user" || item.role === "assistant") &&
-          typeof item.content === "string",
-      )
-    : [];
+  const safeHistory = body.history as ChatMessage[];
 
   const reply = buildAssistantReply({
     userMessage: body.message,
