@@ -46,6 +46,7 @@ export default async function SessionPage({ params }: SessionPageProps) {
               <ProblemEditor
                 problemInstanceId={problem.id}
                 initialCode={normalizeSavedCode(problem.savedCode)}
+                sessionId={interviewSession.id}
               />
             </div>
           </article>

@@ -13,14 +13,16 @@ const MonacoEditor = dynamic(() => import("@monaco-editor/react"), { ssr: false 
 type ProblemEditorProps = {
   problemInstanceId: string;
   initialCode: SavedCodeState;
+  sessionId: string;
 };
 
-export function ProblemEditor({ problemInstanceId, initialCode }: ProblemEditorProps) {
+export function ProblemEditor({ problemInstanceId, initialCode, sessionId }: ProblemEditorProps) {
   const [code, setCode] = useState<SavedCodeState>(initialCode);
   const [language, setLanguage] = useState<EditorLanguage>(
     initialCode.activeLanguage === "PYTHON" ? "python" : "javascript",
   );
   const [message, setMessage] = useState<string>("");
+  const [submitMessage, setSubmitMessage] = useState<string>("");
   const [isPending, startTransition] = useTransition();
 
   const currentCode = useMemo(
@@ -46,6 +48,27 @@ export function ProblemEditor({ problemInstanceId, initialCode }: ProblemEditorP
         setMessage("Saved");
       } catch {
         setMessage("Save failed");
+      }
+    });
+  };
+
+  const submit = () => {
+    setSubmitMessage("");
+    startTransition(async () => {
+      try {
+        const response = await fetch(`/api/problem-instances/${problemInstanceId}/submit`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            language: toPersistedLanguage(language),
+            code: currentCode,
+          }),
+        });
+
+        if (!response.ok) throw new Error("Failed to submit");
+        setSubmitMessage("Submitted. View results for feedback.");
+      } catch {
+        setSubmitMessage("Submit failed");
       }
     });
   };
@@ -77,6 +100,7 @@ export function ProblemEditor({ problemInstanceId, initialCode }: ProblemEditorP
         </div>
         <div className="flex items-center gap-3">
           {message ? <p className="text-xs text-neutral-400">{message}</p> : null}
+          {submitMessage ? <p className="text-xs text-cyan-300">{submitMessage}</p> : null}
           <button
             type="button"
             disabled={isPending}
@@ -85,6 +109,20 @@ export function ProblemEditor({ problemInstanceId, initialCode }: ProblemEditorP
           >
             {isPending ? "Saving..." : "Save Code"}
           </button>
+          <button
+            type="button"
+            disabled={isPending}
+            onClick={submit}
+            className="rounded bg-white px-3 py-1 text-xs font-medium text-black disabled:opacity-70"
+          >
+            Submit
+          </button>
+          <a
+            href={`/results/${sessionId}`}
+            className="rounded border border-neutral-700 px-3 py-1 text-xs text-neutral-200 hover:bg-neutral-800"
+          >
+            View Results
+          </a>
         </div>
       </div>
       <MonacoEditor
