@@ -1,6 +1,6 @@
 # Astraea
 
-Interview preparation platform for object-oriented design and API-based coding interviews.
+Interview preparation platform for the modern era.
 
 ## Stack
 
