@@ -1,0 +1,233 @@
+.app {
+  min-height: 100vh;
+  padding: 1.25rem;
+  max-width: 1680px;
+  margin: 0 auto;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.9rem;
+  padding: 0.9rem 1rem;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+
+.subtitle {
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.status {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+
+.status-ready {
+  color: #6dcf88;
+}
+
+.status-failed {
+  color: #ff8f8f;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin-bottom: 0.9rem;
+  align-items: end;
+  padding: 0.9rem 1rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.field label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.field input,
+.field select,
+.ghost-btn,
+.primary-btn {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+}
+
+.action-group {
+  display: flex;
+  gap: 0.55rem;
+}
+
+.primary-btn {
+  background: var(--text);
+  color: var(--background);
+  font-weight: 550;
+}
+
+.ghost-btn:hover,
+.primary-btn:hover {
+  filter: brightness(0.98);
+}
+
+.ghost-btn:disabled,
+.primary-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error-banner {
+  margin: 0 0 1rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid #7a3030;
+  background: rgba(180, 48, 48, 0.14);
+  color: #ffb4b4;
+  font-size: 0.86rem;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 300px 1fr 300px;
+  gap: 0.8rem;
+  height: calc(100vh - 180px);
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.panel,
+.editor-panel {
+  padding: 1rem;
+  overflow: auto;
+}
+
+.editor-panel {
+  padding: 0.35rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel h2,
+.panel h3,
+.panel h4 {
+  margin: 0 0 0.5rem;
+}
+
+.panel-header,
+.editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.7rem;
+}
+
+.panel p,
+.panel li {
+  font-size: 0.9rem;
+  line-height: 1.46;
+}
+
+.editor-panel .cm-editor {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  font-size: 14px;
+  height: 100%;
+}
+
+.editor-panel .cm-scroller {
+  font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+}
+
+.panel ul {
+  margin: 0 0 0.75rem;
+  padding-left: 1rem;
+}
+
+.meta-line {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.pill {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  padding: 0.18rem 0.45rem;
+  border-radius: 999px;
+  color: var(--muted);
+}
+
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.score-grid div {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.45rem 0.55rem;
+  background: color-mix(in oklab, var(--surface), transparent 12%);
+}
+
+.score-grid span {
+  display: block;
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.score-grid strong {
+  font-size: 1rem;
+}
+
+@media (max-width: 1200px) {
+  .toolbar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .editor-panel {
+    min-height: 420px;
+  }
+}
